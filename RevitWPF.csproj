@@ -1,0 +1,73 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<OutputType>Library</OutputType>
+		<PlatformTarget>x64</PlatformTarget>
+		<Platforms>x64</Platforms>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RevitVersion>2025</RevitVersion>
+		<RevitAddinFolder>$(AppData)\Autodesk\Revit\Addins\$(RevitVersion)</RevitAddinFolder>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Reference Include="RevitAPI">
+			<HintPath>C:\Program Files\Autodesk\Revit $(RevitVersion)\RevitAPI.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="RevitAPIUI">
+			<HintPath>C:\Program Files\Autodesk\Revit $(RevitVersion)\RevitAPIUI.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+	</ItemGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Optimize>false</Optimize>
+		<OutputPath>$(SolutionDir)bin\$(Configuration)\</OutputPath>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+		<WarningLevel>4</WarningLevel>
+		<StartAction>Program</StartAction>
+		<StartProgram>$(ProgramW6432)\Autodesk\Revit 2025\Revit.exe</StartProgram>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+		<DebugType>pdbonly</DebugType>
+		<Optimize>true</Optimize>
+		<OutputPath>$(SolutionDir)bin\$(Configuration)\</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+		<StartAction>Program</StartAction>
+		<StartProgram>$(ProgramW6432)\Autodesk\Revit 2025\Revit.exe</StartProgram>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Update="RevitAddin2025.addin">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<Target Name="CopyAddinFiles" AfterTargets="Build">
+		<ItemGroup>
+			<AddinFiles Include="$(ProjectDir)*.addin" />
+			<DllFiles Include="$(OutputPath)*.dll" />
+		</ItemGroup>
+		<PropertyGroup>
+			<AddinDir Condition="Exists('$(AppData)\Autodesk\Revit\Addins\2025')">$(AppData)\Autodesk\Revit\Addins\2025</AddinDir>
+		</PropertyGroup>
+		<Copy SourceFiles="@(AddinFiles)" DestinationFolder="$(AddinDir)" Condition="Exists('$(AddinDir)')" />
+		<Copy SourceFiles="@(DllFiles)" DestinationFolder="$(AddinDir)" Condition="Exists('$(AddinDir)')" />
+	</Target>
+
+	<Target Name="CleanFiles" AfterTargets="Clean">
+		<ItemGroup>
+			<FilesToDelete Include="$(RevitAddinFolder)\$(TargetName).*" />
+		</ItemGroup>
+		<Delete Files="@(FilesToDelete)" />
+	</Target>
+
+</Project>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Text>Command RevitWPF</Text>
+    <Description>Some description for RevitWPF</Description>
+    <Assembly>RevitWPF.dll</Assembly>
+    <FullClassName>RevitWPF.Command</FullClassName>
+    <ClientId>6c85c383-1781-45f1-ae4b-f30dd8195e96</ClientId>
+    <VendorId>com.test</VendorId>
+    <VendorDescription>Test, https://test.com</VendorDescription>
+  </AddIn>
+</RevitAddIns>
